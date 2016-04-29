@@ -53,7 +53,7 @@ module.exports =
         pane.activate()
         pane.activateItem(item)
 
-    moveToResult = (direction) =>
+    findInProject = (direction) =>
       item = @getResultPaneItem()
       return unless item?
       {resultsView} = item
@@ -62,8 +62,8 @@ module.exports =
         when 'previous' then resultsView.selectPreviousResult()
       resultsView.moveToResult()
 
-    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:move-to-next', -> moveToResult('next')
-    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:move-to-previous', -> moveToResult('previous')
+    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:find-next', -> findInProject('next')
+    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:find-previous', -> findInProject('previous')
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'find-and-replace:use-selection-as-find-pattern', =>
       return if @projectFindPanel?.isVisible() or @findPanel?.isVisible()
