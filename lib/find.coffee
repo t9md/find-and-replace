@@ -47,12 +47,23 @@ module.exports =
       @projectFindPanel.show()
       @projectFindView.findInCurrentlySelectedDirectory(target)
 
-    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:focus-results-pane', ->
-      pane = atom.workspace.paneForURI(ResultsPaneView.URI)
-      if pane?
-        item = pane.itemForURI(ResultsPaneView.URI)
+    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:focus-results-pane', =>
+      if item = @getResultPaneItem()
+        pane = atom.workspace.paneForItem(item)
         pane.activate()
         pane.activateItem(item)
+
+    moveToResult = (direction) =>
+      item = @getResultPaneItem()
+      return unless item?
+      {resultsView} = item
+      switch direction
+        when 'next' then resultsView.selectNextResult()
+        when 'previous' then resultsView.selectPreviousResult()
+      resultsView.moveToResult()
+
+    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:move-to-next', -> moveToResult('next')
+    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:move-to-previous', -> moveToResult('previous')
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'find-and-replace:use-selection-as-find-pattern', =>
       return if @projectFindPanel?.isVisible() or @findPanel?.isVisible()
@@ -121,6 +132,10 @@ module.exports =
         selectNextObjectForEditorElement(this).undoLastSelection()
       'find-and-replace:select-skip': (event) ->
         selectNextObjectForEditorElement(this).skipCurrentSelection()
+
+  getResultPaneItem: ->
+    pane = atom.workspace.paneForURI(ResultsPaneView.URI)
+    pane?.itemForURI(ResultsPaneView.URI)
 
   provideService: ->
     resultsMarkerLayerForTextEditor: @findModel.resultsMarkerLayerForTextEditor.bind(@findModel)

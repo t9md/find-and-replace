@@ -61,5 +61,18 @@ class MatchView extends View
         timeout: 300
       smartScrollToBufferPosition(editor, range.start)
 
+  # [FIXME] duplicate code with confirm
+  moveToMatch: (options = {}) ->
+    range = Range.fromObject(@match.range)
+    openInRightPane = atom.config.get('find-and-replace.openProjectFindResultsInRightPane')
+    options.split = 'left' if openInRightPane
+    editorPromise = atom.workspace.open(@filePath, options)
+    editorPromise.then (editor) ->
+      decorateRange editor, range,
+        class: 'project-find-navigation-flash'
+        timeout: 300
+      editor.setCursorBufferPosition(range.start, autoscroll: true)
+    editorPromise
+
   copy: ->
     atom.clipboard.write(@match.lineText)

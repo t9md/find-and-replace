@@ -187,7 +187,6 @@ class ResultsView extends ScrollView
     @scrollTo(prevView)
 
   showNextResult: ->
-    console.log "show next result"
     @selectNextResult()
     @showResult()
 
@@ -199,6 +198,10 @@ class ResultsView extends ScrollView
   showResult: ->
     view = @find('.selected').view()
     view.show()
+
+  moveToResult: ->
+    view = @find('.selected').view()
+    view.moveToMatch?()
 
   getNextVisible: (element) ->
     return unless element?.length
