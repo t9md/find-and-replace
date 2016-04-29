@@ -58,9 +58,8 @@ module.exports =
       return unless item?
       {resultsView} = item
       switch direction
-        when 'next' then resultsView.selectNextResult()
-        when 'previous' then resultsView.selectPreviousResult()
-      resultsView.moveToResult()
+        when 'next' then resultsView.showNextResult(moveToResult: true)
+        when 'previous' then resultsView.showPreviousResult(moveToResult: true)
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:find-next', -> findInProject('next')
     @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:find-previous', -> findInProject('previous')

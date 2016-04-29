@@ -186,21 +186,17 @@ class ResultsView extends ScrollView
     @selectResult(prevView)
     @scrollTo(prevView)
 
-  showNextResult: ->
+  showNextResult: (options) ->
     @selectNextResult()
-    @showResult()
+    @showResult(options)
 
-  showPreviousResult: ->
+  showPreviousResult: (options) ->
     @selectPreviousResult()
-    @showResult()
+    @showResult(options)
 
-  showResult: ->
+  showResult: (options) ->
     view = @find('.selected').view()
-    view.show()
-
-  moveToResult: ->
-    view = @find('.selected').view()
-    view.moveToMatch?()
+    view.show?(options)
 
   getNextVisible: (element) ->
     return unless element?.length
