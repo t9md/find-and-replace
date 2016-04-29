@@ -191,7 +191,6 @@ class ResultsView extends ScrollView
     @showResult()
 
   showPreviousResult: ->
-    console.log "show previous result"
     @selectPreviousResult()
     @showResult()
 
