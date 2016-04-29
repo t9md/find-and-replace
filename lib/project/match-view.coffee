@@ -1,5 +1,6 @@
 {View} = require 'atom-space-pen-views'
 {Range, CompositeDisposable} = require 'atom'
+{decorateRange, smartScrollToBufferPosition} = require './util'
 
 LeadingWhitespace = /^\s+/
 removeLeadingWhitespace = (string) -> string.replace(LeadingWhitespace, '')
@@ -46,9 +47,19 @@ class MatchView extends View
     openInRightPane = atom.config.get('find-and-replace.openProjectFindResultsInRightPane')
     options.split = 'left' if openInRightPane
     editorPromise = atom.workspace.open(@filePath, options)
-    editorPromise.then (editor) =>
-      editor.setSelectedBufferRange(@match.range, autoscroll: true)
+    if options.activatePane ? true
+      editorPromise.then (editor) =>
+        editor.setSelectedBufferRange(@match.range, autoscroll: true)
     editorPromise
+
+  show: (options = {}) ->
+    range = Range.fromObject(@match.range)
+    options = {pending: true, activatePane: false}
+    @confirm(options).then (editor) ->
+      decorateRange editor, range,
+        class: 'project-find-navigation-flash'
+        timeout: 300
+      smartScrollToBufferPosition(editor, range.start)
 
   copy: ->
     atom.clipboard.write(@match.lineText)

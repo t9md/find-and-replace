@@ -9,6 +9,8 @@ class ResultsView extends ScrollView
     @ol class: 'results-view list-tree focusable-panel has-collapsable-children', tabindex: -1
 
   initialize: (@model) ->
+    @addClass('find-and-replace project-find result-pane')
+
     commandsDisposable = super()
     commandsDisposable.dispose() # turn off default scrolling behavior from ScrollView
 
@@ -54,7 +56,8 @@ class ResultsView extends ScrollView
       'core:copy': =>
         @find('.selected').view()?.copy?()
         false
-
+      'project-find:show-next': => @showNextResult()
+      'project-find:show-previous': => @showPreviousResult()
     @subscriptions.add @model.onDidAddResult @addResult
     @subscriptions.add @model.onDidRemoveResult @removeResult
     @subscriptions.add @model.onDidClearSearchState @clear
@@ -182,6 +185,20 @@ class ResultsView extends ScrollView
 
     @selectResult(prevView)
     @scrollTo(prevView)
+
+  showNextResult: ->
+    console.log "show next result"
+    @selectNextResult()
+    @showResult()
+
+  showPreviousResult: ->
+    console.log "show previous result"
+    @selectPreviousResult()
+    @showResult()
+
+  showResult: ->
+    view = @find('.selected').view()
+    view.show()
 
   getNextVisible: (element) ->
     return unless element?.length

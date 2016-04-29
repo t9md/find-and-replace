@@ -2,6 +2,7 @@
   'cmd-F': 'project-find:show'
   'cmd-f': 'find-and-replace:show'
   'cmd-alt-f': 'find-and-replace:show-replace'
+  'ctrl-cmd-f': 'find-and-replace:focus-results-pane'
 
 '.platform-win32, .platform-linux':
   'ctrl-F': 'project-find:show'
@@ -63,6 +64,17 @@
 '.find-and-replace, .project-find, .project-find .results-view':
   'tab': 'find-and-replace:focus-next'
   'shift-tab': 'find-and-replace:focus-previous'
+
+# [FIXME]
+'.find-and-replace.project-find.result-pane':
+  'j': 'project-find:show-next'
+  'k': 'project-find:show-previous'
+  'l': 'core:move-right'
+  'h': 'core:move-left'
+  'q': 'core:close'
+  'o': 'core:confirm'
+  # '.preview-pane.project-find-navigation':
+
 
 '.platform-darwin .find-and-replace .replace-container atom-text-editor':
   'cmd-enter': 'find-and-replace:replace-all'

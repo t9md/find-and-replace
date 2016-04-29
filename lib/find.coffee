@@ -47,6 +47,13 @@ module.exports =
       @projectFindPanel.show()
       @projectFindView.findInCurrentlySelectedDirectory(target)
 
+    @subscriptions.add atom.commands.add 'atom-workspace', 'project-find:focus-results-pane', ->
+      pane = atom.workspace.paneForURI(ResultsPaneView.URI)
+      if pane?
+        item = pane.itemForURI(ResultsPaneView.URI)
+        pane.activate()
+        pane.activateItem(item)
+
     @subscriptions.add atom.commands.add 'atom-workspace', 'find-and-replace:use-selection-as-find-pattern', =>
       return if @projectFindPanel?.isVisible() or @findPanel?.isVisible()
 
